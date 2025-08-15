@@ -70,11 +70,11 @@ Replace `<project-name>` with `c-vim-dev` or `deep-learning`.
 ## Folder Structure
 
 ```
-├── c-project/
+├── cprj/
 │   ├── Dockerfile
 │   ├── docker-compose.yml
 │   └── README.md
-├── deep-learning/
+├── pyprj/
 │   ├── Dockerfile
 │   ├── docker-compose.yml
 │   └── README.md
@@ -86,4 +86,5 @@ Replace `<project-name>` with `c-vim-dev` or `deep-learning`.
 ## License
 
 Each project is provided for personal or educational use and based on open-source software.
+
 
