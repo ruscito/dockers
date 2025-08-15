@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  deep-learning:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: deep-learning
+    container_name: deep-learning
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/workspace      # your notebooks/projects
+      - dev-home:/home/dev # persistent home for configs, .vimrc, history
+
+volumes:
+  dev-home:
+
