@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  c-vim-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: c-vim-dev
+    container_name: c-vim-dev
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/workspace          # your C projects
+      - dev-home:/home/dev     # persistent dev home (vim, ssh, configs)
+
+volumes:
+  dev-home:
