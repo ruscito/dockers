@@ -67,6 +67,12 @@ docker compose run --rm -p 8888:8888 deep-learning
 * Open your browser and navigate to the URL provided in the console, e.g., `http://localhost:8888/?token=...`.
 * Your project files in the host folder are accessible in `/workspace` inside the container.
 
+### Use Jupyter and terminal simultaneously
+```bash
+docker compose up -d
+docker exec -it deep-learning bash
+```
+
 ---
 
 ## Accessing Root
