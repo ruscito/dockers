@@ -10,27 +10,51 @@ services:
     working_dir: /workspace
     stdin_open: true
     tty: true
-    # Enable host networking for network access
+    
+    # Network configuration - choose based on your host OS
+    # Linux: Use host networking for full local network access
     network_mode: host
-    # Alternative: Use bridge network with port mapping
+    
+    # macOS/Windows: Comment out 'network_mode: host' above and uncomment below
     # ports:
-    #   - "2222:22"  # SSH port if needed
+    #   - "8080:8080"   # Add any ports you need
+    #   - "3000:3000"
+    
     volumes:
       - .:/workspace          # your C projects
       - dev-home:/home/dev     # persistent dev home (vim, ssh, configs)
-      # Mount SSH agent socket for SSH key forwarding (Linux/macOS)
+      
+      # SSH agent forwarding (Linux/macOS only)
+      # Comment out the line below on Windows
       - ${SSH_AUTH_SOCK:-/dev/null}:/ssh-agent
+    
     environment:
+      # SSH agent forwarding (Linux/macOS only)
       - SSH_AUTH_SOCK=/ssh-agent
-    # Capabilities for network operations
+      
+    # Capabilities for network operations (mainly useful on Linux)
     cap_add:
       - NET_ADMIN
       - NET_RAW
-    # Security options (optional - comment out if causing issues)
+    
+    # Security options (comment out if causing issues)
     security_opt:
       - seccomp:unconfined
-    # Privileged mode for full network access (use carefully)
-    # privileged: true
 
 volumes:
   dev-home:
+
+# Alternative compose file for macOS/Windows
+# Copy this to docker-compose.override.yml to automatically override settings
+---
+# docker-compose.override.yml content for macOS/Windows:
+# version: "3.9"
+# services:
+#   c-vim-dev:
+#     network_mode: bridge  # Override host networking
+#     ports:
+#       - "8080:8080"
+#     volumes:
+#       - .:/workspace
+#       - dev-home:/home/dev
+#       # Remove SSH agent socket mounting on Windows
