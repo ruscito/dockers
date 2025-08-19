@@ -1,60 +1,25 @@
+# docker-compose.override.yml
+# Create this file for macOS/Windows to override host networking
+# Docker Compose automatically merges this with docker-compose.yml
+
 version: "3.9"
 
 services:
   c-vim-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: c-vim-dev
-    container_name: c-vim-dev
-    working_dir: /workspace
-    stdin_open: true
-    tty: true
+    # Override host networking with bridge networking
+    network_mode: bridge
     
-    # Network configuration - choose based on your host OS
-    # Linux: Use host networking for full local network access
-    network_mode: host
+    # Add port mappings as needed
+    ports:
+      - "8080:8080"   # Example: if you run web servers
+      - "3000:3000"   # Example: common dev ports
+      - "5000:5000"   # Add more as needed
     
-    # macOS/Windows: Comment out 'network_mode: host' above and uncomment below
-    # ports:
-    #   - "8080:8080"   # Add any ports you need
-    #   - "3000:3000"
-    
+    # For Windows: override volumes to remove SSH agent
     volumes:
-      - .:/workspace          # your C projects
-      - dev-home:/home/dev     # persistent dev home (vim, ssh, configs)
-      
-      # SSH agent forwarding (Linux/macOS only)
-      # Comment out the line below on Windows
-      - ${SSH_AUTH_SOCK:-/dev/null}:/ssh-agent
+      - .:/workspace
+      - dev-home:/home/dev
+      # SSH agent line removed for Windows compatibility
     
-    environment:
-      # SSH agent forwarding (Linux/macOS only)
-      - SSH_AUTH_SOCK=/ssh-agent
-      
-    # Capabilities for network operations (mainly useful on Linux)
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
-    
-    # Security options (comment out if causing issues)
-    security_opt:
-      - seccomp:unconfined
-
-volumes:
-  dev-home:
-
-# Alternative compose file for macOS/Windows
-# Copy this to docker-compose.override.yml to automatically override settings
----
-# docker-compose.override.yml content for macOS/Windows:
-# version: "3.9"
-# services:
-#   c-vim-dev:
-#     network_mode: bridge  # Override host networking
-#     ports:
-#       - "8080:8080"
-#     volumes:
-#       - .:/workspace
-#       - dev-home:/home/dev
-#       # Remove SSH agent socket mounting on Windows
+    # For Windows: remove SSH environment variable
+    environment: []
