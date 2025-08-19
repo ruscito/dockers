@@ -10,9 +10,27 @@ services:
     working_dir: /workspace
     stdin_open: true
     tty: true
+    # Enable host networking for network access
+    network_mode: host
+    # Alternative: Use bridge network with port mapping
+    # ports:
+    #   - "2222:22"  # SSH port if needed
     volumes:
       - .:/workspace          # your C projects
       - dev-home:/home/dev     # persistent dev home (vim, ssh, configs)
+      # Mount SSH agent socket for SSH key forwarding (Linux/macOS)
+      - ${SSH_AUTH_SOCK:-/dev/null}:/ssh-agent
+    environment:
+      - SSH_AUTH_SOCK=/ssh-agent
+    # Capabilities for network operations
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    # Security options (optional - comment out if causing issues)
+    security_opt:
+      - seccomp:unconfined
+    # Privileged mode for full network access (use carefully)
+    # privileged: true
 
 volumes:
   dev-home:
