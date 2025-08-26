@@ -1,0 +1,20 @@
+services:
+  js-dev:
+    build: .
+    container_name: js-dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./workspace:/workspace        # project folder
+      - dev-home:/home/dev            # persist dev user’s config
+    ports:
+      - "3000:3000"                   # React web app
+      - "8081:8081"                   # Metro bundler (React Native)
+      - "19000-19006:19000-19006"     # Expo
+    environment:
+      - NODE_ENV=development
+    working_dir: /workspace
+    user: dev
+
+volumes:
+  dev-home:
